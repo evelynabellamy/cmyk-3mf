@@ -121,6 +121,13 @@ changes present, mixed filaments active, and supports generated where expected.
   the browser studio samples textures.
 - Bambu Studio's GUI may still adjust settings when it opens a project; check the plate before printing.
 
+## Releasing
+
+Releases go through npm trusted publishing: no npm token lives in GitHub. Publishing a GitHub
+release (tag `vX.Y.Z` matching `package.json`) runs `.github/workflows/publish.yml` in the
+`npm` environment, which tests, builds and runs `npm stage publish` over OIDC with provenance.
+A maintainer then approves the staged version with 2FA on npmjs.com before it goes live.
+
 ## License
 
 MIT © Evelyna Bellamy. See [NOTICE.md](NOTICE.md) for third-party material that is fetched
