@@ -1,6 +1,6 @@
 {
   "name": "cmyk-3mf",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Convert colored 3D models into Bambu Studio CMYKW mixed-filament .3mf projects. Zero runtime dependencies; runs in Node and the browser.",
   "license": "MIT",
   "type": "module",
