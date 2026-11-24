@@ -1,0 +1,36 @@
+{
+  "name": "cmyk-3mf",
+  "version": "0.1.0",
+  "description": "Convert colored 3D models into Bambu Studio CMYKW mixed-filament .3mf projects. Zero runtime dependencies; runs in Node and the browser.",
+  "license": "MIT",
+  "type": "module",
+  "author": "Evelyna Bellamy",
+  "homepage": "https://github.com/evelynabellamy/cmyk-3mf#readme",
+  "repository": { "type": "git", "url": "git+https://github.com/evelynabellamy/cmyk-3mf.git" },
+  "bugs": { "url": "https://github.com/evelynabellamy/cmyk-3mf/issues" },
+  "keywords": ["3mf", "bambu-studio", "bambu-lab", "cmyk", "multicolor", "3d-printing", "mixed-filament", "h3c", "ciede2000"],
+  "engines": { "node": ">=20.10" },
+  "sideEffects": false,
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./node": { "types": "./dist/node.d.ts", "import": "./dist/node.js" },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": { "cmyk-3mf": "./dist/cli.js" },
+  "files": ["dist", "README.md", "LICENSE", "NOTICE.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e:bambu": "node scripts/bambu-e2e.mjs",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
