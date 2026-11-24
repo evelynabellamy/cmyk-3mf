@@ -205,8 +205,28 @@ export function solvePalette(parts: ColoredPart[], kit: FilamentKit, opts: Palet
       twin.clusters.push(...g.clusters);
     } else kept.push(g);
   }
-  mixed = kept.slice(0, maxMixed);
-  const dropped = kept.slice(maxMixed);
+  // Over budget: repeatedly fold away the group that is cheapest to lose, where the cost is
+  // its surface weight times the ΔE00 from its source colour to the nearest remaining slot.
+  const dropped: typeof kept = [];
+  const groupLab = (g: (typeof kept)[number]): Lab => [g.lab[0] / (g.weight || 1), g.lab[1] / (g.weight || 1), g.lab[2] / (g.weight || 1)];
+  while (kept.length > maxMixed) {
+    let worst = -1;
+    let worstCost = Infinity;
+    kept.forEach((g, i) => {
+      const src = groupLab(g);
+      let nearest = Math.min(...baseLabs.map((b) => deltaE2000(src, b)));
+      kept.forEach((o, j) => {
+        if (j !== i) nearest = Math.min(nearest, deltaE2000(src, hexToLab(o.target.hex)));
+      });
+      const cost = g.weight * nearest;
+      if (cost < worstCost) {
+        worstCost = cost;
+        worst = i;
+      }
+    });
+    dropped.push(...kept.splice(worst, 1));
+  }
+  mixed = kept;
 
   // Final slot list: bases 1..N always present, mixed after.
   const slots: PaletteSlot[] = k.bases.map((b, i) => ({ slot: i + 1, kind: "base", hex: b.hex.toUpperCase(), areaShare: 0 }));

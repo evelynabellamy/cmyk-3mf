@@ -30,6 +30,13 @@ describe("solvePalette", () => {
     expect(Math.max(...s.parts[0].triSlots!)).toBeLessThanOrEqual(s.palette.slots.length);
   });
 
+  it("spends a tight slot budget where dropping a colour would cost the most", () => {
+    const vase = flutedVase({ segments: 120, rings: 80, flutes: 14, gradient: ["#123B4A", "#1F7A8C", "#B33F6B", "#E9805A", "#F4C542"] });
+    const s = solvePalette([vase], KIT_PLA_PALETTE_CMYKW, { maxMixedSlots: 8 });
+    const visible = s.palette.slots.filter((x) => (x.areaShare ?? 0) > 0.02);
+    expect(Math.max(...visible.map((x) => x.deltaE00 ?? 0))).toBeLessThan(12);
+  });
+
   it("denoise removes isolated triangles", () => {
     const c = cube();
     const slots = new Uint8Array(12).fill(1);
